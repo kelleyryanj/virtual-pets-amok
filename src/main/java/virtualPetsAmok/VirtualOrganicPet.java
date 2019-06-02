@@ -2,8 +2,12 @@ package virtualPetsAmok;
 
 public class VirtualOrganicPet extends VirtualPet implements FeedWaterPets {
 
-	private int thirst;
-	private int hunger;
+	protected int thirst;
+	protected int hunger;
+	
+	public VirtualOrganicPet() {
+		super ();
+	}
 
 	public VirtualOrganicPet(String petName, String description, int boredom, int health, int happiness, int hunger,
 			int thirst) {
@@ -41,6 +45,7 @@ public class VirtualOrganicPet extends VirtualPet implements FeedWaterPets {
 	public void tick() {
 		hunger += 1;
 		thirst += 1;
+		boredom += 1;
 
 	}
 }

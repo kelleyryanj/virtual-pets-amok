@@ -1,30 +1,24 @@
 package virtualPetsAmok;
 
-public class RoboticVirtualDog extends RoboticVirtualPet implements WalkAndCleanDogCage{
+public class RoboticVirtualDog extends RoboticVirtualPet implements walkDog{
 
-	private int cageSoil;
+	
 
-	public RoboticVirtualDog(String petName, String description, int boredom, int health, int happiness, int oilNeed, int cageSoil) {
+	public RoboticVirtualDog(String petName, String description, int boredom, int health, int happiness, int oilNeed) {
 		super(petName, description, boredom, health, happiness, oilNeed);
-		this.cageSoil = cageSoil;
-	}
-
-	
-	
-
-	
-	@Override
-	public void cleanCage(VirtualPet virtualPet) {
-		cageSoil -= cageSoil;
 		
 	}
 
-
 	@Override
-	public void walkDog(VirtualPet virtualPet) {
-		boredom -= boredom;
+	public void walkDog() {
+		boredom = 0;
 		happiness = 100;
 		
 	}
+
+		
+
+
+
 
 }

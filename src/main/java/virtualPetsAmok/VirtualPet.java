@@ -10,6 +10,10 @@ public class VirtualPet {
 	protected int health;
 	protected int happiness;
 
+	public VirtualPet() {
+		
+	}
+	
 	public VirtualPet(String petName, String description, int boredom, int health, int happiness) {
 		this.petName = petName;
 		this.description = description;
@@ -52,10 +56,11 @@ public class VirtualPet {
 	}
 
 	public void tick() {
-		boredom += 1;
+		
 
 	}
 
+	
 	
 
 }
