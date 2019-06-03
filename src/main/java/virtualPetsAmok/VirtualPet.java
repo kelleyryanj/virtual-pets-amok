@@ -1,6 +1,6 @@
 package virtualPetsAmok;
 
-public class VirtualPet {
+public abstract class VirtualPet {
 
 	protected String petName;
 	protected String description;

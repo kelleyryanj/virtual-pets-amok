@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import virtualPetsAmok.VirtualOrganicCat;
+import virtualPetsAmok.RoboticVirtualCat;
 import virtualPetsAmok.RoboticVirtualDog;
 import virtualPetsAmok.RoboticVirtualPet;
 import virtualPetsAmok.VirtualOrganicDog;
@@ -30,19 +31,18 @@ public class virtualPetShelterTest {
 	VirtualOrganicCat litterBox;
 	RoboticVirtualPet virtualPet;
 	RoboticVirtualDog virtualRoboDog1;
-	RoboticVirtualPet robotest;
 	RoboticVirtualDog virtualRoboDog2;
 
 	@Before
 	public void setup() {
 		underTest = new VirtualPetShelter();
 		// VirtualPet is (name, description, boredom, health, happiness)
-		virtualPet1 = new VirtualOrganicPet("pet1", "description", 10, 10, 10, 10, 10);
-		virtualPet2 = new VirtualOrganicPet("pet2", "description", 10, 10, 10, 10, 10);
+		virtualPet1 = new VirtualOrganicCat("pet1", "description", 10, 10, 10, 10, 10);
+		virtualPet2 = new VirtualOrganicCat("pet2", "description", 10, 10, 10, 10, 10);
 		// RoboticalVirtualPet is (name, description, boredom, health, happiness,
 		// oilNeed)
-		virtualRoboPet1 = new RoboticVirtualPet("pet3", "description", 10, 10, 10, 10);
-		virtualRoboPet2 = new RoboticVirtualPet("pet4", "description", 10, 10, 10, 10);
+		virtualRoboPet1 = new RoboticVirtualCat("pet3", "description", 10, 10, 10, 10);
+		virtualRoboPet2 = new RoboticVirtualCat("pet4", "description", 10, 10, 10, 10);
 		virtualRoboDog1 = new RoboticVirtualDog("roboDog1", "roboDog1", 10, 10, 10, 10);
 		virtualRoboDog2 = new RoboticVirtualDog("roboDog2", "roboDog2", 10, 10, 10, 10);
 		// VirtualDog is (name, description, boredom, health, happiness, thirst, hunger,
@@ -52,19 +52,35 @@ public class virtualPetShelterTest {
 	}
 
 	@Test
+	
+	public void shouldReturnLitterSoil() {
+		int check = underTest.getLitterSoil();
+		assertEquals(50, check);
+		
+	}
+	@Test
+	public void shouldReturnHealth() {
+		underTest.takeInNewPetToShelter(virtualPet1);
+		VirtualPet testPet1 = underTest.findPetInShelter("pet1");
+		int check = testPet1.getHealth();
+		assertEquals(10, check);
+		
+	}
+	
+	@Test
+	public void shouldReturnHappiness() {
+		underTest.takeInNewPetToShelter(virtualPet1);
+		VirtualPet testPet1 = underTest.findPetInShelter("pet1");
+		int check = testPet1.getHappiness();
+		assertEquals(10, check);
+		
+	}
+	@Test
 	public void ShouldIntakePetToShelter() {
 		underTest.takeInNewPetToShelter(virtualPet1);
-		VirtualPet result = underTest.findPetInShelter("pet1");
-		assertEquals(virtualPet1, result);
+		VirtualPet check = underTest.findPetInShelter("pet1");
+		assertEquals(virtualPet1, check);
 
-	}
-
-	@Test
-	public void shouldRemovePetWhenAdopted() {
-		underTest.takeInNewPetToShelter(virtualPet1);
-		underTest.removeAdoptedPet(virtualPet1);
-		VirtualPet result = underTest.findPetInShelter(virtualPet1.getPetName());
-		assertThat(result, is(nullValue()));
 	}
 
 	@Test
@@ -74,71 +90,78 @@ public class virtualPetShelterTest {
 		Collection<VirtualPet> allPets = underTest.getAllPets();
 		assertThat(allPets, containsInAnyOrder(virtualPet1, virtualPet2));
 	}
-
-	@Test
-	public void shouldDecreaseoredomOfOnePetTOZero() {
-		underTest.takeInNewPetToShelter(virtualPet1);
-		underTest.playWithPet("pet1");
-		VirtualPet testedPet = underTest.findPetInShelter("pet1");
-		int result = testedPet.getBoredom();
-		assertEquals(result, 0);
-
-	}
-
-	@Test
-	public void shouldDecreaseBoredomOfAllPetsToZero() {
-		underTest.takeInNewPetToShelter(virtualPet1);
-		underTest.takeInNewPetToShelter(virtualPet2);
-		underTest.playWithAllPets();
-		VirtualPet testedPet1 = underTest.findPetInShelter("pet1");
-		VirtualPet testedPet2 = underTest.findPetInShelter("pet2");
-		int result1 = testedPet1.getBoredom();
-		int result2 = testedPet2.getBoredom();
-		assertEquals(result1, 0);
-		assertEquals(result2, 0);
-
-	}
-
-	@Test
-	public void shouldIncreaseByOneAfterTickRuns() {
-		underTest.takeInNewPetToShelter(virtualPet1);
-		underTest.tick();
-		VirtualPet testedPet = underTest.findPetInShelter("pet1");
-		int resultBoredom = testedPet.getBoredom();
-		int resultHunger = ((VirtualOrganicPet) testedPet).getHunger();
-		assertEquals(11, resultBoredom);
-		assertEquals(11, resultHunger);
-	}
-
-	@Test
-
-	public void shouldReturnLitterSoil() {
-		int check = underTest.getLitterSoil();
-		assertEquals(50, check);
-
-	}
-
+	
 	@Test
 	public void shouldEmptyLitterBox() {
 		underTest.emptyLitterBox();
 		int check = underTest.getLitterSoil();
 		assertEquals(0, check);
 	}
+	@Test
+	public void shouldRemovePetWhenAdopted() {
+		underTest.takeInNewPetToShelter(virtualPet1);
+		underTest.removeAdoptedPet(virtualPet1);
+		VirtualPet check = underTest.findPetInShelter(virtualPet1.getPetName());
+		assertThat(check, is(nullValue()));
+	}
+
+
+	@Test
+	public void shouldDecreaseoredomOfOnePetTOZero() {
+		underTest.takeInNewPetToShelter(virtualPet1);
+		underTest.playWithPet("pet1");
+		VirtualPet testPet = underTest.findPetInShelter("pet1");
+		int check = testPet.getBoredom();
+		assertEquals(check, 0);
+
+	}
+	@Test
+	public void shouldDecreaseBoredomOfAllPetsToZero() {
+		underTest.takeInNewPetToShelter(virtualPet1);
+		underTest.takeInNewPetToShelter(virtualPet2);
+		underTest.playWithAllPets();
+		VirtualPet testPet1 = underTest.findPetInShelter("pet1");
+		VirtualPet testPet2 = underTest.findPetInShelter("pet2");
+		int check1 = testPet1.getBoredom();
+		int check2 = testPet2.getBoredom();
+		assertEquals(check1, 0);
+		assertEquals(check2, 0);
+		
+	}
+
+
+	@Test
+	public void shouldBeAbleToFeedAllOrgPets() {
+		
+		underTest.takeInNewPetToShelter(virtualPet1);
+		underTest.takeInNewPetToShelter(virtualPet2);
+		VirtualPet test1 = underTest.findPetInShelter("pet1");
+		VirtualPet test2 = underTest.findPetInShelter("pet2");
+		underTest.feedAllPets();
+		VirtualOrganicPet testPet1 = (VirtualOrganicPet) test1;
+		VirtualOrganicPet testPet2 = (VirtualOrganicPet) test2;
+		int check1 = testPet1.getHunger();
+		int check2 = testPet2.getHunger();
+		assertEquals(0, check1);
+		assertEquals(0, check2);
+		
+	}
+
 
 	@Test
 	public void shouldReturnCageSoil() {
 		underTest.takeInNewPetToShelter(organicDog1);
 		VirtualPet testPet = underTest.findPetInShelter("orgdog1");
-		VirtualOrganicDog pet1 = (VirtualOrganicDog) testPet;
-		int check = pet1.getCageSoil();
+		VirtualOrganicDog testpet1 = (VirtualOrganicDog) testPet;
+		int check = testpet1.getCageSoil();
 		assertEquals(10, check);
 	}
 
 	@Test
 	public void shouldReduceCageSoilToZeroWhenCleaningCage() {
 		underTest.takeInNewPetToShelter(organicDog1);
-		VirtualPet testPet = underTest.findPetInShelter("orgdog1");
 		underTest.cleanDogCage("orgdog1");
+		VirtualPet testPet = underTest.findPetInShelter("orgdog1");		
 		VirtualOrganicDog pet1 = (VirtualOrganicDog) testPet;
 		int check = pet1.getCageSoil();
 		assertEquals(0, check);
@@ -176,23 +199,6 @@ public class virtualPetShelterTest {
 		assertEquals(11, check);
 	}
 
-	@Test
-	public void shouldReturnHealth() {
-		underTest.takeInNewPetToShelter(virtualPet1);
-		VirtualPet testedPet1 = underTest.findPetInShelter("pet1");
-		int result1 = testedPet1.getHealth();
-		assertEquals(10, result1);
-
-	}
-
-	@Test
-	public void shouldReturnHappiness() {
-		underTest.takeInNewPetToShelter(virtualPet1);
-		VirtualPet testedPet1 = underTest.findPetInShelter("pet1");
-		int result1 = testedPet1.getHappiness();
-		assertEquals(10, result1);
-
-	}
 
 	@Test
 	public void shouldBeAbleToFeedPet() {
@@ -220,28 +226,44 @@ public class virtualPetShelterTest {
 		underTest.takeInNewPetToShelter(virtualPet2);
 		VirtualPet test1 = underTest.findPetInShelter("pet1");
 		VirtualPet test2 = underTest.findPetInShelter("pet2");
+		VirtualOrganicPet testPet1 = (VirtualOrganicPet) test1;
+		VirtualOrganicPet testPet2 = (VirtualOrganicPet) test2;
 		underTest.waterAllPets();
-		int check1 = ((VirtualOrganicPet) test1).getThirst();
-		int check2 = ((VirtualOrganicPet) test2).getThirst();
+		int check1 = testPet1.getThirst();
+		int check2 = testPet2.getThirst();
 		assertEquals(0, check1);
 		assertEquals(0, check2);
-
+		
 	}
-
 	@Test
-	public void shouldBeAbleToFeedAllOrgPets() {
-
-		underTest.takeInNewPetToShelter(virtualPet1);
-		underTest.takeInNewPetToShelter(virtualPet2);
-		VirtualPet test1 = underTest.findPetInShelter("pet1");
-		VirtualPet test2 = underTest.findPetInShelter("pet2");
-		underTest.feedAllPets();
-		int check1 = ((VirtualOrganicPet) test1).getHunger();
-		int check2 = ((VirtualOrganicPet) test2).getHunger();
-		assertEquals(0, check1);
-		assertEquals(0, check2);
-
+	public void shouldBeAbleToWalkOrgDogs() {
+		underTest.takeInNewPetToShelter(organicDog1);
+		VirtualPet test1 = underTest.findPetInShelter("orgdog1");
+		underTest.walkDogs("orgdog1");
+		int checkBoredom = test1.getBoredom();
+		int checkHappiness = test1.getHappiness();
+		assertEquals(0, checkBoredom);
+		assertEquals(100, checkHappiness);
+		
 	}
+	@Test
+	public void shouldBeAbleToWalkAllOrgDogs() {
+		underTest.takeInNewPetToShelter(organicDog1);
+		underTest.takeInNewPetToShelter(organicDog2);
+		VirtualPet test1 = underTest.findPetInShelter("orgdog1");
+		VirtualPet test2 = underTest.findPetInShelter("orgdog2");
+		underTest.walkAllOrgDogs();
+		int checkBoredom1 = test1.getBoredom();
+		int checkBoredom2 = test2.getBoredom();
+		int checkHappiness1 = test1.getHappiness();
+		int checkHappiness2 = test2.getHappiness();
+		assertEquals(0, checkBoredom1);
+		assertEquals(0, checkBoredom2);
+		assertEquals(100, checkHappiness1);
+		assertEquals(100, checkHappiness2);
+		
+	}
+
 
 	@Test
 	public void shouldBeAbleToOilAllRoboPets() {
@@ -258,35 +280,7 @@ public class virtualPetShelterTest {
 		assertEquals(0, check2);
 	}
 
-	@Test
-	public void shouldBeAbleToWalkOrgDogs() {
-		underTest.takeInNewPetToShelter(organicDog1);
-		VirtualPet test1 = underTest.findPetInShelter("orgdog1");
-		underTest.walkDogs("orgdog1");
-		int checkBoredom = test1.getBoredom();
-		int checkHappiness = test1.getHappiness();
-		assertEquals(0, checkBoredom);
-		assertEquals(100, checkHappiness);
 
-	}
-
-	@Test
-	public void shouldBeAbleToWalkAllOrgDogs() {
-		underTest.takeInNewPetToShelter(organicDog1);
-		underTest.takeInNewPetToShelter(organicDog2);
-		VirtualPet test1 = underTest.findPetInShelter("orgdog1");
-		VirtualPet test2 = underTest.findPetInShelter("orgdog2");
-		underTest.walkAllOrgDogs();
-		int checkBoredom1 = test1.getBoredom();
-		int checkBoredom2 = test2.getBoredom();
-		int checkHappiness1 = test1.getHappiness();
-		int checkHappiness2 = test2.getHappiness();
-		assertEquals(0, checkBoredom1);
-		assertEquals(0, checkBoredom2);
-		assertEquals(100, checkHappiness1);
-		assertEquals(100, checkHappiness2);
-
-	}
 
 	@Test
 	public void shouldBeAbleToWalkAllRoboDogs() {
@@ -305,4 +299,14 @@ public class virtualPetShelterTest {
 		assertEquals(100, checkHappiness2);
 	}
 
+	@Test
+	public void shouldIncreaseByOneAfterTickRuns() {
+		underTest.takeInNewPetToShelter(virtualPet1);
+		underTest.tick();
+		VirtualPet testedPet = underTest.findPetInShelter("pet1");
+		int resultBoredom = testedPet.getBoredom();
+		int resultHunger = ((VirtualOrganicPet) testedPet).getHunger();
+		assertEquals(11, resultBoredom);
+		assertEquals(11, resultHunger);
+	}
 }
